@@ -16,12 +16,7 @@ dotenv.config()
 const sdk = require('api')('@fsq-developer/v1.0#5ht27ul9n9ebnn')
 
 // 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
-const fetchPlacesPictures = async () =>{
-    sdk.auth(process.env.FSQ_API_KEY);
-    sdk.placePhotos({limit: '1', classifications: 'outdoor', fsq_id: '5b684dab112c6c002cfd309d'})
-      .then(({ data }) => console.log(data))
-      .catch(err => console.error(err));
-}
+
 const locationOptions = {
     method: 'GET',
     url: 'https://api.foursquare.com/v3/places/search?query=coffee',
@@ -30,7 +25,26 @@ const locationOptions = {
         Authorization: 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
     }
     };
+const picQuery = async (query) =>{
+    axios.request(query).then(response=>(response.data))
+}
+        
+const pictures = async (locationReq) =>{
+    let picObj=[]
+    let picList = locationReq.map((picture => axios.request(picture).then(response=>{
+        picObj.push(response.data)
+        // console.log(picObj)
+        // console.log("data",picObj)
+        return(picObj)
+    }
+        )
+        ))
+        // console.log("data",picObj)
+        Promise.all(picList).then(values=>console.log(JSON.stringify(values)))
+    return(picList)
+    
 
+}
 const locations = async (locationReq) => {
     let locationDetails = axios.request(locationReq).then(response => response.data.results)
     let requestDetails =  await locationDetails
@@ -48,7 +62,7 @@ const locations = async (locationReq) => {
     }
     
     )
-    
+   
     // console.log("reqis",requestDetails)
     // console.log("loqis",locationDetails)
     return[locationDetails,requestDetails]
@@ -58,32 +72,9 @@ const locations = async (locationReq) => {
 //     console.log(data)
 //     }
 
-const picQuery = async (query) =>{
-    query.map((location)=>{
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
-            }
-    }
-        options.url = `https://api.foursquare.com/v3/places/${location.fsq_id}/photos?limit=1`
-        
-        return (options)
-    }
 
-    )
-    }
 
-    const pictures = async (locationReq) =>{
-        return locationReq.map((picture => axios.request(picture).then(response=>{
-            console.log(response.data)
-            return(response.data)
-        }
-            )))
-        
     
-    }
     
 
 
@@ -91,13 +82,20 @@ const picQuery = async (query) =>{
 const fetchAxios = async () =>{
     console.log("running")
     const [reqDetails,locDetails] = await locations(locationOptions)
-   
+//    console.log(reqDetails)
+
+
+
+
     // let pictureList = pictures(locationlist).then(data=>{
     //     // console.log("data is",JSON.stringify(data))
     // })
     
     const picJSON = await pictures(locDetails)
-
+    console.log("this",picJSON)
+    // await pictures(locDetails).then(res=>console.log(res.data))
+    // console.log("picjson is",picJSON)
+    return(reqDetails)
     
     // (async () => {
     //     const pics = await picQuery(locationlist)
@@ -141,7 +139,7 @@ app.listen(process.env.PORT, () => {
 app.get("/",cors(),async(req,res)=>{
 
     fetchAxios()
-        .then(data =>res.status(200).send(JSON.stringify(data)))
+        .then(data =>res.status(200).send(data))
 })
 
 

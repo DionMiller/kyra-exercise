@@ -32,7 +32,9 @@ const locationOptions = {
     };
 
 const locations = async (locationReq) => {
-    return axios.request(locationReq).then(response => response.data.results.map((location)=>{
+    let locationDetails = axios.request(locationReq).then(response => response.data.results)
+    let requestDetails =  await locationDetails
+    requestDetails = requestDetails.map((location)=>{
         const options = {
             method: 'GET',
             headers: {
@@ -45,34 +47,62 @@ const locations = async (locationReq) => {
         return (options)
     }
     
-    ))
+    )
+    
+    // console.log("reqis",requestDetails)
+    // console.log("loqis",locationDetails)
+    return[locationDetails,requestDetails]
     }
 // const pictures = async (locationReq) =>{
 //     let data = locationReq.map((picture) => axios.request(picture).then(response=>response.data))
 //     console.log(data)
 //     }
 
+const picQuery = async (query) =>{
+    query.map((location)=>{
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
+            }
+    }
+        options.url = `https://api.foursquare.com/v3/places/${location.fsq_id}/photos?limit=1`
+        
+        return (options)
+    }
 
-const pictures = async (locationReq) =>{
-    let finalData = []
-    locationReq.forEach(item=>axios.request(item).then(response=>{
-        finalData.push(response.data)
-        return(finalData)
-    })
     )
-    console.log(finalData)
-}
+    }
+
+    const pictures = async (locationReq) =>{
+        return locationReq.map((picture => axios.request(picture).then(response=>{
+            console.log(response.data)
+            return(response.data)
+        }
+            )))
+        
+    
+    }
     
 
 
         
 const fetchAxios = async () =>{
     console.log("running")
-    const locationlist = await locations(locationOptions)
+    const [reqDetails,locDetails] = await locations(locationOptions)
    
-    const pictureList = await pictures(locationlist)
+    // let pictureList = pictures(locationlist).then(data=>{
+    //     // console.log("data is",JSON.stringify(data))
+    // })
     
-    // console.log(locationlist)
+    const picJSON = await pictures(locDetails)
+
+    
+    // (async () => {
+    //     const pics = await picQuery(locationlist)
+    //     console.log(pics)
+    // })()
     // return(await pictureList)
 }
 

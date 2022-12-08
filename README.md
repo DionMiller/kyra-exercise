@@ -1,21 +1,16 @@
 # kyra-excercise
 
-Hi,
-Thank your for viewing my excercise, 
-To start the project please run the node.js app with nodemon api.js found in the backend folder,
-Then run the react app found in the frontend folder with npm start.
 
-Thanks again for considering me for this opportunity!
+# Hi,\
+# Thank your for viewing my excercise,\
 
-Dion
-# Getting Started with Create React App Hi,
-# Thank your for viewing my excercise,
+To start the project open the backend folder,and run the node.js app with: \
 
-To start the project open the backend folder,and run the node.js app with:
 ###`nodemon api.js`
-Then run the react app found in the frontend folder with npm start.
+
+Then run the react app found in the frontend folder with npm start.\
 ###`npm start`
 
-Thanks again for considering me for this opportunity!
+Thanks again for considering me for this opportunity!\
 
 Dion

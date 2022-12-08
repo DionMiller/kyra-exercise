@@ -1,12 +1,11 @@
 import { Box, Button, createTheme, Grid, makeStyles, ThemeProvider, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { red } from "@mui/material/colors";
-import { maxWidth } from "@mui/system";
+
 import Loader from "./Loader";
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
-    xs: false;
+    xs: true;
     sm: true;
     md: false;
     lg: false;
@@ -24,13 +23,12 @@ type PlaceType =
   height: number,
   name: string,
 }
-  
-
 
   const theme = createTheme({
     breakpoints: {
       values: {
-        sm: 750,
+        xs:0,
+        sm: 700,
       },
     }
   })
@@ -72,9 +70,11 @@ const LocationCard = () =>{
           sx={{
             backgroundColor: "#000000",
             color: "white",
-            width: "(800px, 100%)",
+            width: "(100%)",
             marginInline: "auto",
             padding: "2rem 3rem",
+            justifyContent:"center"
+            
           }}
           >
           <Typography variant="h3" sx={{ textAlign: "center" }}>
@@ -108,9 +108,10 @@ const LocationCard = () =>{
     
           <Grid
             container
-            justifyContent="center"
+            justifyContent={{sm:"flex-start", xs:"center"}}
             alignContent="center"
             spacing={0.5}
+            display="flex"
             >
             {places.map((item, index) => (
               <Grid item sm={6} key={index}>
@@ -126,7 +127,6 @@ const LocationCard = () =>{
                       height: 300,
                       width: 300,
                       marginLeft: index % 2 === 0 ? "auto" : "default",
-                      // marginRight: index === places.length - 1 && "auto",
                       position: "relative",
                       display:"flex"
                     }}

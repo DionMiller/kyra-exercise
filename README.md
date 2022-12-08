@@ -1,8 +1,9 @@
 
 # Hi,
-# Thank your for viewing my excercise,
+# Thank your for viewing my exercise,
 
-To start the project open the backend folder,and run the node.js app with: 
+To start the project please install npm packages in both folders,\
+then run the node.js app with: 
 
 `nodemon api.js`
 

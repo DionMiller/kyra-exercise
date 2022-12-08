@@ -87,7 +87,7 @@ const LocationCard = () =>{
             {lattLongitude}
           </Typography>
     
-          <Box>
+          <Box sx={{display:"flex"}}>
             <Button sx={{
               display: "block",
               width: "max-content",
@@ -120,7 +120,7 @@ const LocationCard = () =>{
                       to bottom,
                       rgba(0, 0, 0, 0),
                       rgba(0, 0, 0, 0.6)
-                      ), url(${item.prefix}300x300${item.suffix})`,
+                      ), url(${item.prefix}250x250${item.suffix})`,
                       backgroundSize: "cover",
                       backgroundRepeat: "no-repeat",
                       height: 300,
@@ -128,6 +128,7 @@ const LocationCard = () =>{
                       marginLeft: index % 2 === 0 ? "auto" : "default",
                       // marginRight: index === places.length - 1 && "auto",
                       position: "relative",
+                      display:"flex"
                     }}
                     >
                   <Typography

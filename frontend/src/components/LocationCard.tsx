@@ -1,35 +1,37 @@
 import { Box, Button, createTheme, Grid, makeStyles, ThemeProvider, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { red } from "@mui/material/colors";
-import { maxWidth } from "@mui/system";
+
 import Loader from "./Loader";
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    xs: true;
+    sm: true;
+    md: false;
+    lg: false;
+    xl: false;
+
+  }
+}
 type PlaceType =
 {
-    fsq_id: string;
-    categories: Array<{id:number,name:string,icon:{prefix:string,suffix:string}}>;
-    chains: Array<object>;
-    distance: number;
-    geocodes: { main: [Object], roof: [Object] };
-    link: string;
-    location: {
-      address: string;
-      admin_region: string;
-      country: string;
-      formatted_address: string;
-      locality: string;
-      neighborhood: Array<string>;
-      post_town: string;
-      postcode: string;
-      region: string;
-    };
-    name: string;
-    related_places: {},
-    timezone: string
-  }
+  id: string,
+  created_at: string,
+  prefix: string,
+  suffix: string,
+  width: number,
+  height: number,
+  name: string,
+}
 
-
-  const theme = createTheme()
+  const theme = createTheme({
+    breakpoints: {
+      values: {
+        xs:0,
+        sm: 700,
+      },
+    }
+  })
   theme.typography.h3 ={
     color:"white",
    
@@ -39,7 +41,7 @@ type PlaceType =
    
   }
 const LocationCard = () =>{
-    const [places,setPlaces] = useState<any[]>([])
+    const [places,setPlaces] = useState<PlaceType[]>([])
     const [lattLongitude, setlattLongitude] = useState('')
     const [isLoading, setIsLoading] = useState(true)
     useEffect(()=>{
@@ -62,26 +64,30 @@ const LocationCard = () =>{
             <Loader />
         </Box> 
       ) : (
+        <ThemeProvider theme={theme}>
+
         <Box
           sx={{
-            backgroundColor: "#242424",
+            backgroundColor: "#000000",
             color: "white",
-            width: "min(800px, 100%)",
+            width: "(100%)",
             marginInline: "auto",
             padding: "2rem 3rem",
+            justifyContent:"center"
+            
           }}
-        >
+          >
           <Typography variant="h3" sx={{ textAlign: "center" }}>
             Foursquare in your Location
           </Typography>
           <Typography
             variant="h3"
             sx={{ textAlign: "center", marginBottom: "1.5rem" }}
-          >
+            >
             {lattLongitude}
           </Typography>
     
-          <Box>
+          <Box sx={{display:"flex"}}>
             <Button sx={{
               display: "block",
               width: "max-content",
@@ -94,36 +100,37 @@ const LocationCard = () =>{
               color:"white"
             }}
             onClick={()=>{
-                window.location.reload();
-             }}>
+              window.location.reload();
+            }}>
             Search Location
                 </Button> 
           </Box>
     
           <Grid
             container
-            // justifyContent="center"
+            justifyContent={{sm:"flex-start", xs:"center"}}
             alignContent="center"
             spacing={0.5}
-          >
+            display="flex"
+            >
             {places.map((item, index) => (
-              <Grid item md={6} key={index}>
+              <Grid item sm={6} key={index}>
                 <Box
                   sx={{
                     backgroundImage: `linear-gradient(
                       to bottom,
                       rgba(0, 0, 0, 0),
                       rgba(0, 0, 0, 0.6)
-                    ), url(${item.prefix}300x300${item.suffix})`,
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    height: 300,
-                    width: 300,
-                    marginLeft: index % 2 === 0 ? "auto":"default",
-                    // marginRight: index === places.length - 1 && "auto",
-                    position: "relative",
-                  }}
-                >
+                      ), url(${item.prefix}250x250${item.suffix})`,
+                      backgroundSize: "cover",
+                      backgroundRepeat: "no-repeat",
+                      height: 300,
+                      width: 300,
+                      marginLeft: index % 2 === 0 ? "auto" : "default",
+                      position: "relative",
+                      display:"flex"
+                    }}
+                    >
                   <Typography
                     variant="h5"
                     sx={{
@@ -132,12 +139,13 @@ const LocationCard = () =>{
                       bottom: "10px",
                       fontSize: "1.6rem",
                     }}
-                  >{`${item.name}`}</Typography>
+                    >{`${item.name}`}</Typography>
                 </Box>
               </Grid>
             ))}
           </Grid>
         </Box>
+        </ThemeProvider>
       );
     }
 

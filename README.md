@@ -2,8 +2,8 @@
 # Hi,
 # Thank your for viewing my exercise,
 
-To start the project please install npm packages in both folders,\
-then run the node.js app with: 
+To start the project please install the npm packages in both folders,\
+Then run the node.js app with: 
 
 `nodemon api.js`
 

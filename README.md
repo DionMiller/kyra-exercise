@@ -8,21 +8,14 @@ Then run the react app found in the frontend folder with npm start.
 Thanks again for considering me for this opportunity!
 
 Dion
-# Getting Started with Create React App
+# Getting Started with Create React App Hi,
+# Thank your for viewing my excercise,
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To start the project open the backend folder,and run the node.js app with:
+###`nodemon api.js`
+Then run the react app found in the frontend folder with npm start.
+###`npm start`
 
-## Available Scripts
+Thanks again for considering me for this opportunity!
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
+Dion

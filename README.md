@@ -6,7 +6,7 @@ To start the project please install the npm packages in both folders,\
 Please create an .env file in the backend with the following variables:
 
 PORT=4000\
-FSQ_API_KEY='fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='\
+FSQ_API_KEY={API_KEY}
 URL='https://api.foursquare.com/v3/places/search?query=coffee'\
 
 Then run the node.js app with the following

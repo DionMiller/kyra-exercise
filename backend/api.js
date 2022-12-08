@@ -1,10 +1,3 @@
-// const sdk = require('api')('@fsq-developer/v1.0#5ht27ul9n9ebnn');
-
-// sdk.auth('fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE=');
-// sdk.placeSearch()
-//   .then(({ data }) => console.log(data))
-//   .catch(err => console.error(err));
-
 
 const express = require("express")
 const app = express()
@@ -15,33 +8,27 @@ const { response } = require("express");
 dotenv.config()
 const sdk = require('api')('@fsq-developer/v1.0#5ht27ul9n9ebnn')
 
-// 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
-
-const locationOptions = {
+const locationRequestOptions = {
     method: 'GET',
-    url: 'https://api.foursquare.com/v3/places/search?query=coffee',
+    url: `${process.env.URL}`,
     headers: {
         accept: 'application/json',
-        Authorization: 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
+        Authorization: `${process.env.FSQ_API_KEY}`
     }
     };
-const picQuery = async (query) =>{
-    axios.request(query).then(response=>(response.data))
-}
-        
+
 const pictures = async (locationReq) =>{
     let picObj=[]
     let picList = locationReq.map((picture => axios.request(picture).then(response=>{
-        picObj.push(response.data)
-        // console.log(picObj)
-        // console.log("data",picObj)
-        return(picObj)
+        (response.data)
+
+        return(response.data)
     }
         )
         ))
-        // console.log("data",picObj)
-        Promise.all(picList).then(values=>console.log(JSON.stringify(values)))
-    return(picList)
+
+        let results = (await Promise.all(picList)).flat()
+    return(results)
     
 
 }
@@ -53,7 +40,7 @@ const locations = async (locationReq) => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE='
+                Authorization: `${process.env.FSQ_API_KEY}`
             }
     }
         options.url = `https://api.foursquare.com/v3/places/${location.fsq_id}/photos?limit=1`
@@ -62,84 +49,35 @@ const locations = async (locationReq) => {
     }
     
     )
-   
-    // console.log("reqis",requestDetails)
-    // console.log("loqis",locationDetails)
+
     return[locationDetails,requestDetails]
     }
-// const pictures = async (locationReq) =>{
-//     let data = locationReq.map((picture) => axios.request(picture).then(response=>response.data))
-//     console.log(data)
-//     }
-
-
-
-    
-    
-
 
         
-const fetchAxios = async () =>{
-    console.log("running")
-    const [reqDetails,locDetails] = await locations(locationOptions)
-//    console.log(reqDetails)
-
-
-
-
-    // let pictureList = pictures(locationlist).then(data=>{
-    //     // console.log("data is",JSON.stringify(data))
-    // })
+const fetchData = async () =>{
     
-    const picJSON = await pictures(locDetails)
-    console.log("this",picJSON)
-    // await pictures(locDetails).then(res=>console.log(res.data))
-    // console.log("picjson is",picJSON)
-    return(reqDetails)
+    const [loctionQueryList,pictureRequestList] = await locations(locationRequestOptions)
+    let locationDetailsList = await pictures(pictureRequestList)
+    let locationNameList = (await loctionQueryList).map((x=>x.name))
+
+    locationDetailsList = locationDetailsList.map((value,index)=>({...value,name:locationNameList[index]}))
     
-    // (async () => {
-    //     const pics = await picQuery(locationlist)
-    //     console.log(pics)
-    // })()
-    // return(await pictureList)
+
+    return(locationDetailsList)
+
 }
 
     
-
-// async function fetchPlaces() {
-//     try {
-//         const searchParams = new URLSearchParams({
-//           query: 'coffee',
-//           open_now: 'true',
-//           sort: 'DISTANCE'
-//         });
-//         const results = await fetch(
-//           `https://api.foursquare.com/v3/places/search?${searchParams}`,
-//           {
-//             method: 'GET',
-//             headers: {
-//               Accept: 'application/json',
-//               Authorization: 'fsq3Wy3+RUvdvcRLm4DkXbqHwQjIUUjaZcaQNxBWYjuZGhE=',
-//             }
-//           }
-//         );
-//         const data = await results.json();
-//         console.log(JSON.stringify(data.results))
-//         // console.log(data.results)
-//         return data.results;
-//     } catch (err) {
-//         console.error(err);
-//     }
-// }
 app.use(cors())
 app.listen(process.env.PORT, () => {
 	console.log(`Listening at http://localhost:${process.env.PORT}`)
 })
 
 app.get("/",cors(),async(req,res)=>{
-
-    fetchAxios()
+    console.log("Fetching Data...")
+    fetchData()
         .then(data =>res.status(200).send(data))
+        
 })
 
 

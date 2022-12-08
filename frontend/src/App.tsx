@@ -6,7 +6,6 @@ import LocationCard from './components/LocationCard';
 function App() {
   return (
     <div className="App">
-      <h1>Foursquare in your Location</h1>
       <LocationCard />
       
     </div>

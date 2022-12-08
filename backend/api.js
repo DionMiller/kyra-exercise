@@ -17,8 +17,7 @@ const locationRequestOptions = {
     }
     };
 
-const pictures = async (locationReq) =>{
-    let picObj=[]
+const pictureList = async (locationReq) =>{
     let picList = locationReq.map((picture => axios.request(picture).then(response=>{
         (response.data)
 
@@ -32,7 +31,7 @@ const pictures = async (locationReq) =>{
     
 
 }
-const locations = async (locationReq) => {
+const locationsList = async (locationReq) => {
     let locationDetails = axios.request(locationReq).then(response => response.data.results)
     let requestDetails =  await locationDetails
     requestDetails = requestDetails.map((location)=>{
@@ -56,8 +55,8 @@ const locations = async (locationReq) => {
         
 const fetchData = async () =>{
     
-    const [loctionQueryList,pictureRequestList] = await locations(locationRequestOptions)
-    let locationDetailsList = await pictures(pictureRequestList)
+    const [loctionQueryList,pictureRequestList] = await locationsList(locationRequestOptions)
+    let locationDetailsList = await pictureList(pictureRequestList)
     let locationNameList = (await loctionQueryList).map((x=>x.name))
 
     locationDetailsList = locationDetailsList.map((value,index)=>({...value,name:locationNameList[index]}))
